@@ -1,11 +1,11 @@
 from setuptools import setup
 
 setup(
-    name="go_fast",
+    name="myapi",
     version="0.1",
     description="Super simple API example with Sanic, testing and SQL Alchemy",
     author="cdf",
-    package_dir={"go_fast": "go_fast"},
+    package_dir={"myapi": "myapi"},
     install_requires=[
         "sanic",
         "pytest",
