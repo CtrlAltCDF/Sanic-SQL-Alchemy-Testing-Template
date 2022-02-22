@@ -6,7 +6,13 @@ setup(
     description="Super simple API example with Sanic, testing and SQL Alchemy",
     author="cdf",
     package_dir={"go_fast": "go_fast"},
-    install_requires=["sanic", "pytest", "sanic_testing"],
+    install_requires=[
+        "sanic",
+        "pytest",
+        "sanic_testing",
+        "alembic",
+        "sqlalchemy"
+    ],
     scripts=[
         "scripts/clear_temp",
     ]

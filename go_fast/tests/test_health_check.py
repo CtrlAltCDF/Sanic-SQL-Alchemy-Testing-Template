@@ -3,11 +3,11 @@ from go_fast import zoom
 
 @pytest.fixture
 def app():
-    return zoom()
+    return zoom(testing=True)
 
 def test_basic_test_client(app):
-    request, response = app.test_client.get("/")
+    request, response = app.test_client.get("/health_check")
 
     assert request.method.lower() == "get"
-    assert response.body == b"foo"
+    assert response.json == {"health": "ok"}
     assert response.status == 200
