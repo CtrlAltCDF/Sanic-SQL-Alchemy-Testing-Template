@@ -1,11 +1,9 @@
 import pytest
-from sanic import Sanic, response, text
-
-from app import generate_app
+from go_fast import zoom
 
 @pytest.fixture
 def app():
-    return generate_app()
+    return zoom()
 
 def test_basic_test_client(app):
     request, response = app.test_client.get("/")
