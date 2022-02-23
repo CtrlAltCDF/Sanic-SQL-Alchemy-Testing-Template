@@ -1,5 +1,5 @@
-from distutils.log import debug
 import getopt, sys
+from sanic import Sanic
 from myapi import app
 
 
@@ -15,12 +15,24 @@ def main():
         print(err)
         sys.exit(2)
 
+    def parse_input(val):
+        try:
+            return int(val)
+        except ValueError:
+            if val in ["True", "False"]:
+                return True if val == "True" else False
+
+    def return_instance_config(instance: Sanic):
+        config = {"debug": False, "port": None, "workers": 0}
+        for key in config.keys():
+            if key.upper() in instance.config:
+                config[key.lower()] = parse_input(instance.config[key.upper()])
+        return config
+
     config = find_arg(["-c", "--config"])
     if config in ["dev", "prod"]:
-        if config == "dev":
-            app(config).run(debug=True)
-        else:
-            app(config).run()
+            instance = app(config)
+            instance.run(**return_instance_config(instance))
     else:
         raise ValueError("Invalid config.")
 

@@ -1,9 +1,7 @@
-from distutils.command.config import config
 from typing import Dict, Any
 from sanic import Sanic, json
 from sanic.config import Config
 from configparser import ConfigParser
-import sanic.cli
 
 from myapi.routes import load_routes
 
@@ -33,12 +31,12 @@ class IniConfig(Config):
 
 def app(config=None):
     ini_config = IniConfig(path=f"config_{config}.ini")
-    app = Sanic(ini_config.APP_NAME, config=ini_config)
+    sanic_app = Sanic(ini_config.APP_NAME, config=ini_config)
 
-    load_routes(app)
+    load_routes(sanic_app)
 
-    @app.get("/health_check")
+    @sanic_app.get("/health_check")
     async def health_check(request):
         return json({"health": "ok"})
 
-    return app
+    return sanic_app
