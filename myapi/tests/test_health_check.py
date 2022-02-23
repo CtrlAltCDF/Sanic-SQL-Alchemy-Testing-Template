@@ -1,14 +1,13 @@
 import pytest
 from sanic import Sanic
-from myapi import run
+from myapi import app as myapi_app
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def app() -> Sanic:
-    return run(testing=True)
+    return myapi_app("test")
 
 def test_confg(app: Sanic):
-    assert app.config == 1
-    assert app.config["APP_NAME"] == "go_fast" # this fails, fo some reason i get : Sanic app name "myapi" already in use.
+    assert app.config["APP_NAME"] == 'myapi_test'
 
 
 def test_heath_check_endpoint(app: Sanic):

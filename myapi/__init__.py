@@ -1,15 +1,18 @@
+from distutils.command.config import config
 from typing import Dict, Any
 from sanic import Sanic, json
 from sanic.config import Config
 from configparser import ConfigParser
+import sanic.cli
+
+from myapi.routes import load_routes
 
 class IniConfig(Config):
     def __init__(self, *args, path: str, **kwargs):
         super().__init__(*args, **kwargs)
-
-        self.config_parser = ConfigParser()
-        self.config_parser.read(path)
-        self.apply(self.config_parser['sanic'])
+        config_parser = ConfigParser()
+        config_parser.read(path)
+        self.apply(config_parser['sanic'])
 
     def apply(self, config):
         self.update(self._to_uppercase(config))
@@ -28,20 +31,11 @@ class IniConfig(Config):
                 retval[upper_key] = value
         return retval
 
-def run(testing=False):
-    app = Sanic(__name__)
-    config_state = None
-    if not app.state.is_debug and not testing:
-        config_state = "config_prod"
-    elif testing:
-        config_state = "config_test"
-    else:
-        config_state = "config_dev"
+def app(config=None):
+    ini_config = IniConfig(path=f"config_{config}.ini")
+    app = Sanic(ini_config.APP_NAME, config=ini_config)
 
-    @app.before_server_start
-    def load_config(app, loop):
-        ini_config = IniConfig(path=f"{config_state}.ini")
-        app.config.update(ini_config)
+    load_routes(app)
 
     @app.get("/health_check")
     async def health_check(request):

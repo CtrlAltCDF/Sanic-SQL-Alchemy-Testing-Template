@@ -15,5 +15,7 @@ setup(
     ],
     scripts=[
         "scripts/clear_temp",
+        "scripts/devapp",
+        "scripts/prodapp",
     ]
 )
