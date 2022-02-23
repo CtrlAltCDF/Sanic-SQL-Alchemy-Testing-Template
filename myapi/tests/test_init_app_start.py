@@ -2,12 +2,13 @@ import pytest
 from sanic import Sanic
 from myapi import app as myapi_app
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="function")
 def app() -> Sanic:
     return myapi_app("test")
 
 def test_confg(app: Sanic):
     assert app.config["APP_NAME"] == 'myapi_test'
+    assert app.config["SQLALCHEMY_URL"] == 'sqlite+aiosqlite:///:memory:'
 
 
 def test_heath_check_endpoint(app: Sanic):

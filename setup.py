@@ -11,7 +11,9 @@ setup(
         "pytest",
         "sanic_testing",
         "alembic",
-        "sqlalchemy"
+        "sqlalchemy",
+        "aiomysql",
+        "aiosqlite"
     ],
     scripts=[
         "scripts/clear_temp",
